@@ -1,11 +1,21 @@
 const screen = { w: 500, h: 400 };
 const resolution = { w: 160, h: 128 };
+const charRes = { w: 3, h: 5 };
+const spacing = { w: 1, h: 1 };
 const border = 10;
 
 let pixy;
 let loaded_font;
 
-let buffer = "#include <stdio.h>\n\nint main(int argc, char** argv)\n{\n  printf(\"Hello, World!\\n\");\n  return 0;\n}\n\n█\n\n\n\n\n\n\n\n\n\n\n\n--- main.c ---\n";
+let buffer = [
+  "#include <stdio.h>",
+  "",
+  "int main(int argc, char** argv)",
+  "{",
+  "  printf(\"Hello, World!\\n\");",
+  "  return 0;",
+  "}",
+];
 
 function setup() {
   createCanvas(screen.w, screen.h);
@@ -33,6 +43,9 @@ function draw() {
 
   // display text
   noStroke();
-  RenderText(pixy, buffer, clr, loadedFont, [1, 1]);
+  for (let i = 0; i < buffer.length; i++) {
+    let pos = [0, i * (charRes.h + spacing.h)];
+    RenderText(pixy, buffer[i], clr, loadedFont, [spacing.w, spacing.h], pos);
+  }
   pixy.display();
 }

@@ -15,8 +15,7 @@ function CarriageReturn(cursor, height, spacing) {
   cursor[1] += height + spacing[1];
 }
 
-function RenderText(pixy, text, color, font, spacing) {
-  let cursor = [0, 0];
+function RenderText(pixy, text, color, font, spacing, cursor = [0, 0]) {
   for (let i = 0; i < text.length; i++) {
     let char = font.get(text[i]);
     if (text[i] == '\n') {
