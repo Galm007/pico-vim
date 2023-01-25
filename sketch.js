@@ -1,12 +1,10 @@
 const screen = { w: 500, h: 400 };
 const border = 50;
-
 const charRes = { w: 3, h: 5 };
 const spacing = { w: 1, h: 2 };
-const pixyResolution = {
-  w: 40 * (charRes.w + spacing.w),
-  h: 20 * (charRes.h + spacing.h),
-};
+
+const charSize = { w: charRes.w + spacing.w, h: charRes.h + spacing.h };
+const pixyResolution = { w: 40 * charSize, h: 20 * charSize };
 
 let pixy;
 let loaded_font;
@@ -48,10 +46,11 @@ function draw() {
   // display text
   let offset = 0;
   for (let i = 0; i < buffer.length; i++) {
-    let pos = [0, (i + offset) * (charRes.h + spacing.h)];
+    let pos = [0, (i + offset) * charSize.h];
     RenderText(pixy, buffer[i], clr, loadedFont, [spacing.w, spacing.h], pos);
 
-    if (buffer[i].length * (charRes.w + spacing.w) > pixyResolution.w)
+    // adjust the next rows if the current row is too long
+    if (buffer[i].length * charSize.w > pixyResolution.w)
       offset++;
   }
 
