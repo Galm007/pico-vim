@@ -43,9 +43,15 @@ function draw() {
 
   // display text
   noStroke();
+  let offset = 0;
   for (let i = 0; i < buffer.length; i++) {
-    let pos = [0, i * (charRes.h + spacing.h)];
+    let pos = [0, (i + offset) * (charRes.h + spacing.h)];
     RenderText(pixy, buffer[i], clr, loadedFont, [spacing.w, spacing.h], pos);
+
+    if (buffer[i].length * (charRes.w + spacing.w) > resolution.w)
+      offset++;
   }
+
+  // render pixy
   pixy.display();
 }
