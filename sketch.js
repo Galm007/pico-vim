@@ -16,6 +16,7 @@ const pixyResolution = {
 let pixy;
 let loaded_font;
 
+let scroll = 0;
 let buffer = [
   "#include <stdio.h>",
   "",
@@ -52,12 +53,13 @@ function draw() {
 
   // display text
   let offset = 0;
-  for (let i = 0; i < buffer.length; i++) {
+  for (let i = 0; i < min(buffer.length - scroll, gridSize.h); i++) {
     let pos = [0, (i + offset) * charSize.h];
-    RenderText(pixy, buffer[i], clr, loadedFont, [spacing.w, spacing.h], pos);
+    let idx = i + scroll;
+    RenderText(pixy, buffer[idx], clr, loadedFont, [spacing.w, spacing.h], pos);
 
     // adjust the next rows if the current row is too long
-    if (buffer[i].length > gridSize.w)
+    if (buffer[idx].length > gridSize.w)
       offset++;
   }
 
