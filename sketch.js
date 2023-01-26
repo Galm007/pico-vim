@@ -16,13 +16,8 @@ const pixyResolution = {
 let pixy;
 let loaded_font;
 
-// where enums ;-;
-const NORMAL = 0;
-const INSERT = 1;
-const VISUAL = 2;
-
 let cursor = { x: 0, y: 0 };
-let mode = NORMAL;;
+let normalMode = true;
 let scroll = 0;
 let buffer = [
   "#include <stdio.h>",
@@ -31,29 +26,6 @@ let buffer = [
   "{",
   "  printf(\"Hello, World!\\n\");",
   "  return 0;",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
-  "}",
   "}",
 ];
 
@@ -71,7 +43,7 @@ function setup() {
 }
 
 function keyPressed() {
-  if (mode == NORMAL) {
+  if (normalMode) {
     switch (key) {
       case "h":
         cursor.x--;
@@ -88,16 +60,12 @@ function keyPressed() {
       default:
         break;
     }
-  } else if (mode == INSERT) {
-
-  } else if (mode == VISUAL) {
-
   } else {
-    print("Invalid Mode!");
+
   }
 
   // keep the cursor inside the buffer
-  cursor.y = min(max(cursor.y, 0), buffer.length);
+  cursor.y = min(max(cursor.y, 0), max(buffer.length - 1, 0));
   cursor.x = min(max(cursor.x, 0), buffer[cursor.y].length);
 
   // scroll if the cursor is travelling off the screen
@@ -142,13 +110,7 @@ function draw() {
     }
 
   // display current mode
-  let modeStr = mode == NORMAL
-    ? "--- NORMAL ---"
-    : mode == INSERT
-      ? "--- INSERT ---"
-      : mode == VISUAL
-        ? "--- VISUAL ---"
-        : "INVALID MODE !!!";
+  let modeStr = normalMode ? "--- NORMAL ---" : "--- INSERT ---";
 
   // display cursor position
   let cursorPosStr = (cursor.x + 1) + ":" + (cursor.y + 1);
