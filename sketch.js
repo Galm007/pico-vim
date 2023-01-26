@@ -16,6 +16,13 @@ const pixyResolution = {
 let pixy;
 let loaded_font;
 
+// where enums ;-;
+const NORMAL = 0;
+const INSERT = 1;
+const VISUAL = 2;
+
+let cursor = { x: 0, y: 0 };
+let mode = NORMAL;;
 let scroll = 0;
 let buffer = [
   "#include <stdio.h>",
@@ -56,7 +63,7 @@ function draw() {
 
   // display text
   let offset = 0;
-  for (let i = 0; i < min(buffer.length - scroll, gridSize.h); i++) {
+  for (let i = 0; i < min(buffer.length - scroll, gridSize.h - 1); i++) {
     let pos = [0, (i + offset) * charSize.h];
     let idx = i + scroll;
     RenderText(pixy, buffer[idx], clr, loadedFont, [spacing.w, spacing.h], pos);
@@ -65,6 +72,37 @@ function draw() {
     if (buffer[idx].length > gridSize.w)
       offset++;
   }
+
+  // display cursor
+  for (let i = 0; i < charRes.w; i++) 
+    for (let j = 0; j < charRes.h; j++)
+      pixy.pixels[cursor.x * charSize.w + i][cursor.y * charSize.h + j] = clr;
+
+  // display current mode
+  let modeStr = mode == NORMAL
+    ? "--- NORMAL ---"
+    : mode == INSERT
+      ? "--- INSERT ---"
+      : mode == VISUAL
+        ? "--- VISUAL ---"
+        : "INVALID MODE !!!";
+
+  // display cursor position
+  let cursorPosStr = (cursor.x + 1) + ":" + (cursor.y + 1);
+
+  // add space between modeStr and cursorPosStr
+  let spaceStr = "";
+  for (let i = 0; i < gridSize.w - modeStr.length - cursorPosStr.length; i++)
+    spaceStr = spaceStr.concat(' ');
+
+  // display status bar
+  RenderText(
+    pixy,
+    modeStr + spaceStr + cursorPosStr,
+    clr,
+    loadedFont,
+    [spacing.w, spacing.h],
+    [0, (gridSize.h - 1) * charSize.h]);
 
   // render pixy
   noStroke();
