@@ -32,6 +32,29 @@ let buffer = [
   "  printf(\"Hello, World!\\n\");",
   "  return 0;",
   "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
+  "}",
 ];
 
 function setup() {
@@ -45,6 +68,43 @@ function setup() {
 
   // load font
   loadedFont = LoadFont(font);
+}
+
+function keyPressed() {
+  if (mode == NORMAL) {
+    switch (key) {
+      case "h":
+        cursor.x--;
+        break;
+      case "j":
+        cursor.y++;
+        break;
+      case "k":
+        cursor.y--;
+        break;
+      case "l":
+        cursor.x++;
+        break;
+      default:
+        break;
+    }
+  } else if (mode == INSERT) {
+
+  } else if (mode == VISUAL) {
+
+  } else {
+    print("Invalid Mode!");
+  }
+
+  // keep the cursor inside the buffer
+  cursor.y = min(max(cursor.y, 0), buffer.length);
+  cursor.x = min(max(cursor.x, 0), buffer[cursor.y].length);
+
+  // scroll if the cursor is travelling off the screen
+  if (cursor.y - scroll >= gridSize.h - 1)
+    scroll += cursor.y - scroll - gridSize.h + 2;
+  else if (cursor.y - scroll < 0)
+    scroll += cursor.y - scroll;
 }
 
 function draw() {
@@ -75,8 +135,11 @@ function draw() {
 
   // display cursor
   for (let i = 0; i < charRes.w; i++) 
-    for (let j = 0; j < charRes.h; j++)
-      pixy.pixels[cursor.x * charSize.w + i][cursor.y * charSize.h + j] = clr;
+    for (let j = 0; j < charRes.h; j++) {
+      let x = cursor.x * charSize.w + i;
+      let y = (cursor.y - scroll) * charSize.h + j;
+      pixy.pixels[x][y] = clr;
+    }
 
   // display current mode
   let modeStr = mode == NORMAL
