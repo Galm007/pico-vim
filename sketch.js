@@ -51,6 +51,9 @@ function draw() {
   noFill();
   rect(0, 0, screen.w, screen.h);
 
+  // clear pixy pixels
+  pixy.pixels.forEach(column => column.fill(color(0)));
+
   // display text
   let offset = 0;
   for (let i = 0; i < min(buffer.length - scroll, gridSize.h); i++) {
