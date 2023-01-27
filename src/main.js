@@ -1,3 +1,9 @@
+/* Use this for getting the keys rest use normal
+ *```node.addEventListener('keydown', function(event) {
+    const key = event.key; // "a", "1", "Shift", etc.
+});```
+ */
+
 const screen = { w: 500, h: 400 };
 const border = 50;
 const charRes = { w: 3, h: 5 };
