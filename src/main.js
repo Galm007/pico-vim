@@ -4,23 +4,16 @@
 });```
  */
 
-const screen = { w: 500, h: 400 };
-const border = 50;
-const charRes = { w: 3, h: 5 };
-const spacing = { w: 1, h: 2 };
-const gridSize = { w: 40, h: 20 };
-
-const charSize = {
-  w: charRes.w + spacing.w,
-  h: charRes.h + spacing.h
-};
-const pixyResolution = {
-  w: gridSize.w * charSize.w,
-  h: gridSize.h * charSize.h
-};
+const screen = { w: 500, h: 400 }; // size of screen (in pixels)
+const border = 50;                 // border width
+const spacing = { w: 1, h: 2 };    // space between characters (in pixy pixels)
+const gridSize = { w: 40, h: 20 }; // amount of characters to fit on screen
 
 let pixy;
 let loaded_font;
+let charRes;        // resolution of the font
+let charSize;       // resolution + spacing
+let pixyResolution; // size of screen (in pixy pixels)
 
 let cursor = { x: 0, y: 0 };
 let normalMode = true;
@@ -38,14 +31,28 @@ let buffer = [
 function setup() {
   createCanvas(screen.w, screen.h);
 
+  // load font
+  loadedFont = LoadFont(lcd_font_5x7);
+
+  // calculate 
+  charRes = {
+    w: loadedFont.get(' ')[0].length,
+    h: loadedFont.get(' ').length
+  };
+  charSize = {
+    w: charRes.w + spacing.w,
+    h: charRes.h + spacing.h
+  };
+  pixyResolution = {
+    w: gridSize.w * charSize.w,
+    h: gridSize.h * charSize.h
+  };
+
   // initialize Pixy
   pixy = new Pixy(
     [border, border],
     [screen.w - border * 2, screen.h - border * 2],
     [pixyResolution.w, pixyResolution.h]);
-
-  // load font
-  loadedFont = LoadFont(font);
 }
 
 function keyPressed() {
