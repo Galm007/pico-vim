@@ -92,8 +92,8 @@ function draw() {
   noFill();
   rect(0, 0, screen.w, screen.h);
 
-  // clear pixy pixels
-  pixy.pixels.forEach(column => column.fill(color(0)));
+  // reset pixy pixels
+  pixy.img = createImage(pixyResolution.w, pixyResolution.h);
 
   // display text
   let offset = 0;
@@ -112,7 +112,7 @@ function draw() {
     for (let j = 0; j < charRes.h; j++) {
       let x = cursor.x * charSize.w + i;
       let y = (cursor.y - scroll) * charSize.h + j;
-      pixy.pixels[x][y] = clr;
+      pixy.setPixel([x, y], clr);
     }
 
   // display current mode
@@ -136,6 +136,5 @@ function draw() {
     [0, (gridSize.h - 1) * charSize.h]);
 
   // render pixy
-  noStroke();
   pixy.display();
 }
