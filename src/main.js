@@ -105,8 +105,8 @@ function draw() {
   // display text
   let offset = 0;
   for (let i = 0; i < min(buffer.length - scroll, gridSize.h - 1); i++) {
-    let pos = [0, (i + offset) * charSize.h];
-    let idx = i + scroll;
+    const pos = [0, (i + offset) * charSize.h];
+    const idx = i + scroll;
     RenderText(pixy, buffer[idx], clr, loadedFont, [spacing.w, spacing.h], pos);
 
     // adjust the next rows if the current row is too long
@@ -117,16 +117,16 @@ function draw() {
   // display cursor
   for (let i = 0; i < charRes.w; i++) 
     for (let j = 0; j < charRes.h; j++) {
-      let x = cursor.x * charSize.w + i;
-      let y = (cursor.y - scroll) * charSize.h + j;
+      const x = cursor.x * charSize.w + i;
+      const y = (cursor.y - scroll) * charSize.h + j;
       pixy.setPixel([x, y], clr);
     }
 
   // display current mode
-  let modeStr = normalMode ? "--- NORMAL ---" : "--- INSERT ---";
+  const modeStr = normalMode ? "--- NORMAL ---" : "--- INSERT ---";
 
   // display cursor position
-  let cursorPosStr = (cursor.x + 1) + ":" + (cursor.y + 1);
+  const cursorPosStr = (cursor.x + 1) + ":" + (cursor.y + 1);
 
   // add space between modeStr and cursorPosStr
   let spaceStr = "";
