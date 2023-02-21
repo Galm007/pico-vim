@@ -143,5 +143,6 @@ function draw() {
     [0, (gridSize.h - 1) * charSize.h]);
 
   // render pixy
+  pixy.updatePixels();
   pixy.display();
 }
