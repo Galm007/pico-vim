@@ -10,7 +10,7 @@ const spacing = { w: 1, h: 2 };    // space between characters (in pixy pixels)
 const gridSize = { w: 40, h: 20 }; // amount of characters to fit on screen
 
 let pixy;
-let loaded_font;
+let loadedFont;
 let charRes;        // resolution of the font
 let charSize;       // resolution + spacing
 let pixyResolution; // size of screen (in pixy pixels)
