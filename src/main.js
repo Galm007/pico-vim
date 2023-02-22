@@ -115,13 +115,13 @@ function draw() {
   }
 
   // display cursor
-  RenderText(pixy, "█", clr, loadedFont, [spacing.w, spacing.h], [cursor.x * charSize.w, cursor.y * charSize.h]);
-  // for (let i = 0; i < charRes.w; i++) 
-  //   for (let j = 0; j < charRes.h; j++) {
-  //     const x = cursor.x * charSize.w + i;
-  //     const y = (cursor.y - scroll) * charSize.h + j;
-  //     pixy.setPixel([x, y], clr);
-  //   }
+  RenderText(
+    pixy,
+    "█",
+    clr,
+    loadedFont,
+    [spacing.w, spacing.h],
+    [cursor.x * charSize.w, cursor.y * charSize.h]);
 
   RenderStatusBar(clr);
 
