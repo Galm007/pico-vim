@@ -4,23 +4,16 @@
 });```
  */
 
-const screen = { w: 500, h: 400 };
-const border = 50;
-const charRes = { w: 3, h: 5 };
-const spacing = { w: 1, h: 2 };
-const gridSize = { w: 40, h: 20 };
-
-const charSize = {
-  w: charRes.w + spacing.w,
-  h: charRes.h + spacing.h
-};
-const pixyResolution = {
-  w: gridSize.w * charSize.w,
-  h: gridSize.h * charSize.h
-};
+const screen = { w: 500, h: 400 }; // size of screen (in pixels)
+const border = 50;                 // border width
+const spacing = { w: 1, h: 2 };    // space between characters (in pixy pixels)
+const gridSize = { w: 40, h: 20 }; // amount of characters to fit on screen
 
 let pixy;
-let loaded_font;
+let loadedFont;
+let charRes;        // resolution of the font
+let charSize;       // resolution + spacing
+let pixyResolution; // size of screen (in pixy pixels)
 
 let cursor = { x: 0, y: 0 };
 let normalMode = true;
@@ -38,14 +31,28 @@ let buffer = [
 function setup() {
   createCanvas(screen.w, screen.h);
 
+  // load font
+  loadedFont = LoadFont(lcd_font_5x7);
+
+  // calculate 
+  charRes = {
+    w: loadedFont.get(' ')[0].length,
+    h: loadedFont.get(' ').length
+  };
+  charSize = {
+    w: charRes.w + spacing.w,
+    h: charRes.h + spacing.h
+  };
+  pixyResolution = {
+    w: gridSize.w * charSize.w,
+    h: gridSize.h * charSize.h
+  };
+
   // initialize Pixy
   pixy = new Pixy(
     [border, border],
     [screen.w - border * 2, screen.h - border * 2],
     [pixyResolution.w, pixyResolution.h]);
-
-  // load font
-  loadedFont = LoadFont(font);
 }
 
 function keyPressed() {
@@ -92,14 +99,14 @@ function draw() {
   noFill();
   rect(0, 0, screen.w, screen.h);
 
-  // clear pixy pixels
-  pixy.pixels.forEach(column => column.fill(color(0)));
+  // reset pixy pixels
+  pixy.img = createImage(pixyResolution.w, pixyResolution.h);
 
   // display text
   let offset = 0;
   for (let i = 0; i < min(buffer.length - scroll, gridSize.h - 1); i++) {
-    let pos = [0, (i + offset) * charSize.h];
-    let idx = i + scroll;
+    const pos = [0, (i + offset) * charSize.h];
+    const idx = i + scroll;
     RenderText(pixy, buffer[idx], clr, loadedFont, [spacing.w, spacing.h], pos);
 
     // adjust the next rows if the current row is too long
@@ -108,18 +115,27 @@ function draw() {
   }
 
   // display cursor
-  for (let i = 0; i < charRes.w; i++) 
-    for (let j = 0; j < charRes.h; j++) {
-      let x = cursor.x * charSize.w + i;
-      let y = (cursor.y - scroll) * charSize.h + j;
-      pixy.pixels[x][y] = clr;
-    }
+  RenderText(
+    pixy,
+    "█",
+    clr,
+    loadedFont,
+    [spacing.w, spacing.h],
+    [cursor.x * charSize.w, cursor.y * charSize.h]);
 
+  RenderStatusBar(clr);
+
+  // render pixy
+  pixy.updatePixels();
+  pixy.display();
+}
+
+function RenderStatusBar(clr) {
   // display current mode
-  let modeStr = normalMode ? "--- NORMAL ---" : "--- INSERT ---";
+  const modeStr = normalMode ? "--- NORMAL ---" : "--- INSERT ---";
 
   // display cursor position
-  let cursorPosStr = (cursor.x + 1) + ":" + (cursor.y + 1);
+  const cursorPosStr = (cursor.x + 1) + ":" + (cursor.y + 1);
 
   // add space between modeStr and cursorPosStr
   let spaceStr = "";
@@ -134,8 +150,4 @@ function draw() {
     loadedFont,
     [spacing.w, spacing.h],
     [0, (gridSize.h - 1) * charSize.h]);
-
-  // render pixy
-  noStroke();
-  pixy.display();
 }
