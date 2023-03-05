@@ -4,27 +4,46 @@ class Vector2 {
         this.y = y;   
     }
 
+    static MonoVec2(x) {
+        return new Vector2(x, x);
+    }
+
     equals(vec2) {
         return this.x == vec2.x && this.y == vec2.y;
     }
 
     copy() {
-        return new Vector2(x, y);
+        return new Vector2(this.x, this.y);
     }
 
     abs() {
         this.x = Math.abs(this.x);
         this.y = Math.abs(this.y);
+        return this;
     }
 
     add(vec2) {
         this.x += vec2.x;
         this.y += vec2.y
+        return this;
     }
 
-    subtract(vec2) {
+    sub(vec2) {
         this.x -= vec2.x;
         this.y -= vec2.y
+        return this;
+    }
+
+    mul(vec2) {
+        this.x *= vec2.x;
+        this.y *= vec2.y;
+        return this;
+    } 
+
+    div(vec2) {
+        this.x /= vec2.x;
+        this.y /= vec2.y;
+        return this;
     }
 
     toArr() {
@@ -34,5 +53,6 @@ class Vector2 {
     fromArr(arr) {
         this.x = arr[0];
         this.y = arr[1];
+        return this;
     }
 }
