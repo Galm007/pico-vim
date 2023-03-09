@@ -6,7 +6,6 @@ let pixy;
 let loadedFont;
 let charRes;        // resolution of the font
 let charSize;       // resolution + spacing
-let pixyResolution; // size of screen (in pixy pixels)
 
 let cursor = new Vector2(0, 0);
 let normalMode = true;
@@ -25,6 +24,9 @@ function setup() {
   createCanvas(screen.x, screen.y);
   noSmooth();
 
+  for (let i in buffer)
+    buffer[i] = arrToList(new DoubleLinked.List(), buffer[i]);
+
   // load font
   loadedFont = LoadFont(lcd_font_5x7);
 
@@ -33,13 +35,15 @@ function setup() {
 
   charSize = charRes.copy().add(spacing);
 
-  pixyResolution = charSize.copy().mul(gridSize);
+  let res = charSize.copy().mul(gridSize);
 
   // initialize Pixy
   pixy = new Pixy(
     Vector2.MonoVec2(0).toArr(),
     screen.toArr(),
-    pixyResolution.toArr());
+    res.toArr());
+
+  pixy.res = res;
 }
 
 function keyPressed() {
@@ -65,8 +69,8 @@ function keyPressed() {
   }
 
   // keep the cursor inside the buffer
-  cursor.y = min(max(cursor.y, 0), max(buffer.length - 1, 0));
-  cursor.x = min(max(cursor.x, 0), buffer[cursor.y].length);
+  cursor.y = clamp(cursor.y, 0, max(buffer.length - 1, 0));
+  cursor.x = clamp(cursor.x, 0, buffer[cursor.y].length);
 
   // scroll if the cursor is travelling off the screen
   if (cursor.y - scroll >= gridSize.y - 1)
@@ -81,14 +85,15 @@ function draw() {
   const clr = color(10, 230, 10);
 
   // reset pixy pixels
-  pixy.img = createImage(pixyResolution.x, pixyResolution.y);
+  pixy.img = createImage(pixy.res.x, pixy.res.y);
 
   // display text
   let offset = 0;
   for (let i = 0; i < min(buffer.length - scroll, gridSize.y - 1); i++) {
     const pos = [0, (i + offset) * charSize.y];
     const idx = i + scroll;
-    RenderText(pixy, buffer[idx], clr, loadedFont, spacing.toArr(), pos);
+    //RenderTextLinkedList
+    RenderTextLinkedList(pixy, buffer[idx], clr, loadedFont, spacing.toArr(), pos);
 
     // adjust the next rows if the current row is too long
     if (buffer[idx].length > gridSize.x)
