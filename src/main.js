@@ -1,5 +1,4 @@
 const screen = new Vector2(500, 400); // size of screen (in pixels)
-const border = 50;                 // border width
 const spacing = new Vector2(1, 2);    // space between characters (in pixy pixels)
 const gridSize = new Vector2(40, 20); // amount of characters to fit on screen
 
@@ -38,8 +37,8 @@ function setup() {
 
   // initialize Pixy
   pixy = new Pixy(
-    Vector2.MonoVec2(border).toArr(),
-    screen.copy().sub(Vector2.MonoVec2(border * 2)).toArr(),
+    Vector2.MonoVec2(0).toArr(),
+    screen.toArr(),
     pixyResolution.toArr());
 }
 
@@ -80,12 +79,6 @@ function draw() {
   background(0);
 
   const clr = color(10, 230, 10);
-
-  // draw border
-  strokeWeight(border);
-  stroke(clr);
-  noFill();
-  rect(0, 0, screen.x, screen.y);
 
   // reset pixy pixels
   pixy.img = createImage(pixyResolution.x, pixyResolution.y);
