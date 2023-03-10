@@ -17,18 +17,17 @@ function setup() {
 }
 
 function keyPressed() {
-  if (mode = Mode.Normal) {
+  if (mode == Mode.Normal) {
     Controls()
     return;
   }
-
 }
 
 function draw() {
   background(0);
 
   // reset pixy pixels
-  pixy.img = createImage(pixy.res.x, pixy.res.y);
+  ClearPixy(pixy);
 
   // display text
   let offset = 0;

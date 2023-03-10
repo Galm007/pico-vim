@@ -1,12 +1,17 @@
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
+function ClearPixy(pixy) {
+    for (let i in pixy.img.pixels)
+        pixy.img.pixels[i] = 0;
+}
+
 function arrToList(list, arr) {
     for (let i in arr)
         list.push(arr[i]);
     return list;
 }
 
-    function Controls() {
+function Controls() {
     switch (key) {
         case "h":
             cursor.x--;

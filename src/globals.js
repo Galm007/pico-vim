@@ -11,7 +11,6 @@ let pixy; // pixy, the class and library used to render a pixel array
 
 let cursor = new Vector2(0, 0); // the cursor location
 let mode = Mode.Normal;
-let modeDisplay = []
 let scroll = 0;
 let buffer = [
   "#include <stdio.h>",
