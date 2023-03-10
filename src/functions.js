@@ -9,19 +9,22 @@ function arrToList(list, arr) {
     function Controls() {
     switch (key) {
         case "h":
-        cursor.x--;
-        break;
+            cursor.x--;
+            break;
         case "j":
-        cursor.y++;
-        break;
+            cursor.y++;
+            break;
         case "k":
-        cursor.y--;
-        break;
+            cursor.y--;
+            break;
         case "l":
-        cursor.x++;
-        break;
+            cursor.x++;
+            break;
+
+               
+
         default:
-        break;
+            break;
     }
 
     // keep the cursor inside the buffer
