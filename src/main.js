@@ -1,31 +1,13 @@
-const screen = new Vector2(500, 400); // size of screen (in pixels)
-const spacing = new Vector2(1, 2);    // space between characters (in pixy pixels)
-const gridSize = new Vector2(40, 20); // amount of characters to fit on screen
-
-let pixy;
-let loadedFont;
-let charRes;        // resolution of the font
-let charSize;       // resolution + spacing
-
-let cursor = new Vector2(0, 0);
-let normalMode = true;
-let scroll = 0;
-let buffer = [
-  "#include <stdio.h>",
-  "",
-  "int main(int argc, char** argv)",
-  "{",
-  "  printf(\"Hello, World!\\n\");",
-  "  return 0;",
-  "}",
-];
-
 function setup() {
   createCanvas(screen.x, screen.y);
   noSmooth();
 
+  textColor = color(255);
+  emptyColor = color(59, 120, 255);
+
   for (let i in buffer)
     buffer[i] = arrToList(new DoubleLinked.List(), buffer[i]);
+  buffer = arrToList(new DoubleLinked.List(), buffer);
 
   // load font
   loadedFont = LoadFont(lcd_font_5x7);
@@ -48,76 +30,64 @@ function setup() {
 
 function keyPressed() {
   if (normalMode) {
-    switch (key) {
-      case "h":
-        cursor.x--;
-        break;
-      case "j":
-        cursor.y++;
-        break;
-      case "k":
-        cursor.y--;
-        break;
-      case "l":
-        cursor.x++;
-        break;
-      default:
-        break;
-    }
-  } else {
-
+    Controls()
+    return;
   }
 
-  // keep the cursor inside the buffer
-  cursor.y = clamp(cursor.y, 0, max(buffer.length - 1, 0));
-  cursor.x = clamp(cursor.x, 0, buffer[cursor.y].length);
-
-  // scroll if the cursor is travelling off the screen
-  if (cursor.y - scroll >= gridSize.y - 1)
-    scroll += cursor.y - scroll - gridSize.y + 2;
-  else if (cursor.y - scroll < 0)
-    scroll += cursor.y - scroll;
 }
 
 function draw() {
   background(0);
-
-  const clr = color(10, 230, 10);
 
   // reset pixy pixels
   pixy.img = createImage(pixy.res.x, pixy.res.y);
 
   // display text
   let offset = 0;
-  for (let i = 0; i < min(buffer.length - scroll, gridSize.y - 1); i++) {
-    const pos = [0, (i + offset) * charSize.y];
+  //for (let i = 0; i < min(buffer.length - scroll, gridSize.y - 1); i++) {
+
+  /*
+  let j = 0;
+  for (let i = buffer.head; i != undefined; i = i.next) {
+  */
+  let i = buffer.head;
+  for (let j = 0; j < gridSize.y; j++) {
+    const pos = [0, (j + offset) * charSize.y];
     const idx = i + scroll;
-    //RenderTextLinkedList
-    if (buffer[idx].length != 0)
-      RenderTextLinkedList(pixy, buffer[idx], clr, loadedFont, spacing.toArr(), pos);
+
+    if (i == undefined) {
+      RenderText(pixy, '~', emptyColor, loadedFont, spacing.toArr(), pos);
+      continue;
+    }
+
+    if (i.data.length != 0) // render the ~ otherwise
+      RenderTextLinkedList(pixy, i.data, textColor, loadedFont, spacing.toArr(), pos);
+    else
+      RenderText(pixy, '~', emptyColor, loadedFont, spacing.toArr(), pos);
 
     // adjust the next rows if the current row is too long
-    if (buffer[idx].length > gridSize.x)
+    if (i.data.length > gridSize.x)
       offset++;
+    i = i.next;
   }
 
   // display cursor
   RenderText(
     pixy,
     "█",
-    clr,
+    textColor,
     loadedFont,
     spacing.toArr(),
     cursor.copy().mul(charSize).toArr());
 
-  RenderStatusBar(clr);
+  RenderStatusBar(textColor);
 
   // render pixy
   pixy.updatePixels();
   pixy.display();
 }
 
-function RenderStatusBar(clr) {
+function RenderStatusBar(textColor) {
   // display current mode
   const modeStr = normalMode ? "--- NORMAL ---" : "--- INSERT ---";
 
@@ -133,7 +103,7 @@ function RenderStatusBar(clr) {
   RenderText(
     pixy,
     modeStr + spaceStr + cursorPosStr,
-    clr,
+    textColor,
     loadedFont,
     spacing.toArr(),
     [0, (gridSize.y - 1) * charSize.y]);
