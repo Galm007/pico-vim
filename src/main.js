@@ -93,7 +93,8 @@ function draw() {
     const pos = [0, (i + offset) * charSize.y];
     const idx = i + scroll;
     //RenderTextLinkedList
-    RenderTextLinkedList(pixy, buffer[idx], clr, loadedFont, spacing.toArr(), pos);
+    if (buffer[idx].length != 0)
+      RenderTextLinkedList(pixy, buffer[idx], clr, loadedFont, spacing.toArr(), pos);
 
     // adjust the next rows if the current row is too long
     if (buffer[idx].length > gridSize.x)
