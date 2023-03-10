@@ -17,8 +17,9 @@ function setup() {
 }
 
 function keyPressed() {
+  Controls()
   if (mode == Mode.Normal) {
-    Controls()
+    NormalControls()
     return;
   }
 }
