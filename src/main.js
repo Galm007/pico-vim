@@ -23,7 +23,7 @@ function draw() {
   background(0);
 
   // reset pixy pixels
-  ClearPixy(pixy);
+  pixy.clear();
 
   // display text
   let offset = 0;

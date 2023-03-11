@@ -1,14 +1,15 @@
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-function InitBuffer() {
-    for (let i in buffer)
-    buffer[i] = arrToList(new DoubleLinked.List(), buffer[i]);
-    buffer = arrToList(new DoubleLinked.List(), buffer);
+function divmod(num, div) {
+    const toReturn = [Math.floor(num / div), undefined];
+    toReturn[1] = num - toReturn[0] * div;
+    return toReturn;
 }
 
-function ClearPixy(pixy) {
-    for (let i in pixy.img.pixels)
-        pixy.img.pixels[i] = 0;
+function InitBuffer() {
+    for (const i in buffer)
+        buffer[i] = arrToList(new DoubleLinked.List(), buffer[i]);
+    buffer = arrToList(new DoubleLinked.List(), buffer);
 }
 
 function GetLinkedInd(list, i) {
@@ -19,7 +20,7 @@ function GetLinkedInd(list, i) {
 }
 
 function arrToList(list, arr) {
-    for (let i in arr)
+    for (const i in arr)
         list.push(arr[i]);
     return list;
 }
