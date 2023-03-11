@@ -9,7 +9,7 @@ function setup() {
     screen.toArr(),
     charSize.copy().mul(gridSize).toArr());
 
-  pixy.res = res;
+  //pixy.res = res;
 }
 
 function keyPressed() {
