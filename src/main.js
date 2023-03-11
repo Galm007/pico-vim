@@ -2,10 +2,6 @@ function setup() {
   createCanvas(screen.x, screen.y);
   noSmooth();
 
-  for (let i in buffer)
-    buffer[i] = arrToList(new DoubleLinked.List(), buffer[i]);
-  buffer = arrToList(new DoubleLinked.List(), buffer);
-
   let res = charSize.copy().mul(gridSize);
 
   pixy = new Pixy(
@@ -17,11 +13,12 @@ function setup() {
 }
 
 function keyPressed() {
-  Controls()
-  if (mode == Mode.Normal) {
-    NormalControls()
-    return;
-  }
+  Controls();
+  [
+    NormalControls,
+    InsertControls,
+    CommandControls
+  ][mode]();
 }
 
 function draw() {

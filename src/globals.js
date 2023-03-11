@@ -20,4 +20,6 @@ let buffer = [
   "  printf(\"Hello, World!\\n\");",
   "  return 0;",
   "}",
-];
+]; InitBuffer();
+let cursorRefs = [undefined, GetLinkedInd(buffer, cursor.y)];
+cursorRefs[0] = GetLinkedInd(cursorRefs[1].data, cursor.x);
