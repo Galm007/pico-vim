@@ -44,8 +44,7 @@ function draw() {
       RenderText(pixy, '~', emptyColor, loadedFont, spacing.toArr(), pos);
 
     // adjust the next rows if the current row is too long
-    if (i.data.length > gridSize.x)
-      offset++;
+    offset += Math.floor(i.data.length / gridSize.x);
     i = i.next;
   }
 
