@@ -2,14 +2,12 @@ function setup() {
   createCanvas(screen.x, screen.y);
   noSmooth();
 
-  let res = charSize.copy().mul(gridSize);
+  //let res = charSize.copy().mul(gridSize);
 
   pixy = new Pixy(
     Vector2.MonoVec2(0).toArr(),
     screen.toArr(),
     charSize.copy().mul(gridSize).toArr());
-
-  //pixy.res = res;
 }
 
 function keyPressed() {
