@@ -87,11 +87,11 @@ function NormalControls() {
 }
 
 function InsertControls() {
-    //buffer.head.data.insert_head(key);
-
-    cursorRefs[1].data.insert(cursorRefs[0].before, key);
+    if (cursorRefs[1].data.head == cursorRefs[0])
+        cursorRefs[1].data.insert_head(key);
+    else
+        cursorRefs[1].data.insert(cursorRefs[0].before, key);
     cursor.x++;
-    //cursorRefs[0] = cursorRefs[0].next;
 }
 
 function CommandControls() {
