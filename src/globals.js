@@ -13,13 +13,13 @@ let cursor = new Vector2(0, 0); // the cursor location
 let mode = Mode.Normal;
 let scroll = 0;
 let buffer = [
-  "#include <stdio.h>",
-  "",
-  "int main(int argc, char** argv)",
-  "{",
-  "  printf(\"Hello, World!\\n\");",
-  "  return 0;",
-  "}",
+    "#include <stdio.h>",
+    "",
+    "int main(int argc, char** argv)",
+    "{",
+    "  printf(\"Hello, World!\\n\");",
+    "  return 0;",
+    "}",
 ]; InitBuffer();
 let cursorRefs = [undefined, GetLinkedInd(buffer, cursor.y)];
 cursorRefs[0] = GetLinkedInd(cursorRefs[1].data, cursor.x);
