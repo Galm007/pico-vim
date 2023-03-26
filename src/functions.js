@@ -37,24 +37,19 @@ function NormalControls() {
     switch (key) {
         case 'h':
             cursor.x--;
-            cursorRefs[0] = cursorRefs[0].before;
             break;
         case 'j':
             cursor.y++;
-            cursorRefs[1] = cursorRefs[1].next;
             break;
         case 'k':
             cursor.y--;
-            cursorRefs[1] = cursorRefs[1].before;
             break;
         case 'l':
             cursor.x++;
-            cursorRefs[0] = cursorRefs[0].next;
             break;
 
         case 'a':
             cursor.x++;
-            cursorRefs[0] = cursorRefs[0].next;
         case 'i':
             mode = Mode.Insert;
             break;
@@ -63,9 +58,26 @@ function NormalControls() {
             break;
     }
 
-    // keep the cursor inside the buffer
-    cursor.y = clamp(cursor.y, 0, max(buffer.length - 1, 0));
-    cursor.x = clamp(cursor.x, 0, GetLinkedInd(buffer, cursor.y).data.length); // replace this later
+    if (cursor.y >= buffer.length) {
+        cursor.y = buffer.length - 1;
+        cursorRefs[1] = buffer.tail;
+    }
+    if (cursor.y < 0) {
+        cursor.y = 0;
+        cursorRefs[1] = buffer.head;
+    }
+    cursorRefs[1] = GetLinkedInd(buffer, cursor.y);
+
+    const lineData = cursorRefs[1].data;
+    if (cursor.x >= lineData.length) {
+        cursor.x = lineData.length - 1;
+        cursorRefs[0] = lineData.tail;
+    }
+    if (cursor.x < 0) {
+        cursor.x = 0;
+        cursorRefs[0] = lineData.head;
+    }
+    cursorRefs[0] = GetLinkedInd(cursorRefs[1].data, cursor.x);
 
     // scroll if the cursor is travelling off the screen
     if (cursor.y - scroll >= gridSize.y - 1)
