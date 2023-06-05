@@ -12,13 +12,6 @@ function InitBuffer() {
     buffer = arrToList(new DoubleLinked.List(), buffer);
 }
 
-function GetLinkedInd(list, i) {
-    let toReturn = list.head;
-    for (let j = 0; j < i; j++)
-        toReturn = toReturn.next;
-    return toReturn;
-}
-
 function arrToList(list, arr) {
     for (const i in arr)
         list.push(arr[i]);
@@ -66,7 +59,7 @@ function NormalControls() {
         cursor.y = 0;
         cursorRefs[1] = buffer.head;
     }
-    cursorRefs[1] = GetLinkedInd(buffer, cursor.y);
+    cursorRefs[1] = buffer.ind(cursor.y);
 
     const lineData = cursorRefs[1].data;
     if (cursor.x >= lineData.length) {
@@ -77,7 +70,7 @@ function NormalControls() {
         cursor.x = 0;
         cursorRefs[0] = lineData.head;
     }
-    cursorRefs[0] = GetLinkedInd(cursorRefs[1].data, cursor.x);
+    cursorRefs[0] = cursorRefs[1].data.ind(cursor.x);
 
     // scroll if the cursor is travelling off the screen
     if (cursor.y - scroll >= gridSize.y - 1)

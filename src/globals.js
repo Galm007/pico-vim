@@ -21,5 +21,5 @@ let buffer = [
     "  return 0;",
     "}",
 ]; InitBuffer();
-let cursorRefs = [undefined, GetLinkedInd(buffer, cursor.y)];
-cursorRefs[0] = GetLinkedInd(cursorRefs[1].data, cursor.x);
+let cursorRefs = [undefined, buffer.ind(cursor.y)];
+cursorRefs[0] = cursorRefs[1].data.ind(cursor.x);
