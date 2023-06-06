@@ -1,21 +1,35 @@
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+const Clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-function divmod(num, div) {
-    const toReturn = [Math.floor(num / div), undefined];
-    toReturn[1] = num - toReturn[0] * div;
-    return toReturn;
+function DivMod(dividend, divisor) {
+    const tmp = Math.floor(dividend / divisor);
+    return [tmp, dividend - tmp * divisor];
 }
 
-function InitBuffer() {
-    for (const i in buffer)
-        buffer[i] = arrToList(new DoubleLinked.List(), buffer[i]);
-    buffer = arrToList(new DoubleLinked.List(), buffer);
+function GetFontRes(font) {
+    return new Vector2(font.get(' ')[0].length, font.get(' ').length);
 }
 
-function arrToList(list, arr) {
-    for (const i in arr)
+function ArrToList(arr) {
+    let list = new DoubleLinked.List();
+    for (let i = 0; i < arr.length; i++)
         list.push(arr[i]);
     return list;
+}
+
+function UpdateCursorRefs() {
+    if (buffer.length > 0) {
+        cursorRefs[1] = buffer.ind(0);
+
+        if (cursorRefs[1].length > 0)
+            cursorRefs[0] = cursorRefs[1].ind(0);
+    }
+}
+
+function InitBuffer(strArray) {
+    for (let i = 0; i < strArray.length; i++)
+        buffer.push(ArrToList(strArray[i]));
+
+    UpdateCursorRefs();
 }
 
 function Controls() {
