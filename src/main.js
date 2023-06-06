@@ -56,7 +56,7 @@ function RenderBuffer() {
     let offset = 0;
 
     let node = buffer.head;
-    for (let i = 0; i < Math.min(buffer.length + offset, gridSize.y); i++) {
+    for (let i = 0; node != null && i < Math.min(buffer.length + offset, gridSize.y); i++) {
         const pos = [0, (i + offset) * cellSize.y];
 
         if (node.data.length > 0)
@@ -70,7 +70,7 @@ function RenderBuffer() {
 
     // add '~' to show empty lines that are not part of the buffer
     for (let i = buffer.length + offset; i < gridSize.y; i++) {
-        const pos = [0, (i + offset) * cellSize.y]
+        const pos = [0, i * cellSize.y];
         RenderText(pixy, '~', emptyColor, loadedFont, spacing.toArr(), pos);
     }
 }
