@@ -30,16 +30,7 @@ function draw() {
     pixy.clear();
 
     RenderBuffer();
-
-    // display cursor
-    RenderText(
-        pixy,
-        '█',
-        textColor,
-        loadedFont,
-        spacing.toArr(),
-        cursor.copy().mul(cellSize).toArr());
-
+    RenderCursor();
     RenderStatusBar(textColor);
 
     // update pixy
@@ -73,6 +64,25 @@ function RenderBuffer() {
         const pos = [0, i * cellSize.y];
         RenderText(pixy, '~', emptyColor, loadedFont, spacing.toArr(), pos);
     }
+}
+
+function RenderCursor() {
+    // calculate y-offset of the cursor to account for line overflows
+    let offset = 0;
+    let node = buffer.head;
+    for (let i = 0; i < cursor.y; i++) {
+        offset += Math.floor(node.data.length / gridSize.x);
+        node = node.next;
+    }
+    offset += Math.floor(cursor.x / gridSize.x);
+
+    RenderText(
+        pixy,
+        '█',
+        textColor,
+        loadedFont,
+        spacing.toArr(),
+        new Vector2(cursor.x, cursor.y + offset).mul(cellSize).toArr());
 }
 
 function RenderStatusBar(textColor) {
