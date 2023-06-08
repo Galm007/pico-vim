@@ -21,7 +21,31 @@ function setup() {
 }
 
 function keyPressed() {
-    Controls();
+    if (key === "Escape") {
+        mode = Mode.Normal;
+        commandStr = "";
+        ClampCursorInBuffer();
+        print("commandStr cleared");
+        return;
+    }
+
+    // ignore special keys
+    if (key === "Shift"
+        || key === "OS"
+        || key === "Control"
+        || key === "Tab"
+        || key === "CapsLock"
+        || key === "Alt"
+        || key === "PageUp"
+        || key === "PageDown"
+        || key === "Home"
+        || key === "Insert"
+        || key === "Delete")
+        return;
+
+    commandStr = commandStr.concat(key);
+    print(commandStr);
+
     [NormalControls, InsertControls, CommandControls][mode]();
 }
 

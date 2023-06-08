@@ -16,3 +16,4 @@ let mode       = Mode.Normal;
 let scroll     = 0;
 let buffer     = new DoubleLinked.List();
 let cursorRefs = [null, null];
+let commandStr = "";
